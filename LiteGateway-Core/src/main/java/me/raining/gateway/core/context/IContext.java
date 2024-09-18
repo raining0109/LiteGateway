@@ -1,7 +1,8 @@
 package me.raining.gateway.core.context;
 
 import io.netty.channel.ChannelHandlerContext;
-import javafx.css.Rule;
+import me.raining.gateway.common.config.Rule;
+import me.raining.gateway.core.request.DefaultHttpGatewayRequest;
 
 import java.util.Map;
 import java.util.function.Consumer;
@@ -11,7 +12,7 @@ import java.util.function.Consumer;
  * @version 1.0.0
  * @description 网关上下文接口定义
  */
-public interface LiteGatewayContext {
+public interface IContext {
 
     /**
      * 一个请求正在执行中的状态
@@ -72,6 +73,11 @@ public interface LiteGatewayContext {
     Object getRequest();
 
     /**
+     * 设置请求对象
+     */
+    void setRequest(DefaultHttpGatewayRequest request);
+
+    /**
      * 获取请求结果
      */
     Object getResponse();
@@ -89,12 +95,12 @@ public interface LiteGatewayContext {
     /**
      * 设置请求规则
      */
-    void setRule();
+    void setRule(Rule rule);
 
     /**
      * 设置请求返回结果
      */
-    void setResponse();
+    void setResponse(Object response);
 
     /**
      * 设置请求异常信息
@@ -124,7 +130,7 @@ public interface LiteGatewayContext {
     /**
      * 设置回调函数
      */
-    void setCompletedCallBack(Consumer<LiteGatewayContext> consumer);
+    void setCompletedCallBack(Consumer<IContext> consumer);
 
     /**
      * 执行回调函数
