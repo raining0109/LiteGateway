@@ -12,8 +12,6 @@
     <module>LiteGateway-Core</module>
       <module>LiteGateway-Common</module>
       <module>LiteGateway-Config-Center</module>
-      <module>LiteGateway-Config-Center/LiteGateway-Config-Center-Api</module>
-    <module>LiteGateway-Config-Center/LiteGateway-Config-Center-Nacos-Impl</module>
       <module>LiteGateway-Register-Center</module>
       <module>LiteGateway-Client</module>
       <module>LiteGateway-HttpServer</module>
@@ -24,6 +22,119 @@
     <maven.compiler.source>21</maven.compiler.source>
     <maven.compiler.target>21</maven.compiler.target>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+    <netty.version>4.1.51.Final</netty.version>
+    <async-http-client.version>2.0.37</async-http-client.version>
+    <biz.paluch.redis.version>4.4.6.Final</biz.paluch.redis.version>
+    <lmax.version>3.3.4</lmax.version>
+    <caffeine.version>2.8.5</caffeine.version>
+    <protobuf.version>3.7.1</protobuf.version>
+    <lombok.version>1.18.0</lombok.version>
+    <slf4j.version>1.7.25</slf4j.version>
+    <log4j2.version>2.11.1</log4j2.version>
+    <junit.version>4.12</junit.version>
+    <guava.version>25.1-jre</guava.version>
+    <oshi.verison>3.5.0</oshi.verison>
+    <mapstruct.version>1.2.0.Final</mapstruct.version>
+    <jackson.version>2.12.3</jackson.version>
+    <fastjson.verson>1.2.76</fastjson.verson>
+    <jsonpath.version>2.4.0</jsonpath.version>
+    <kafka.version>2.3.1</kafka.version>
   </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+      <version>1.18.24</version>
+    </dependency>
+
+    <!-- 网络依赖 -->
+    <dependency>
+      <groupId>io.netty</groupId>
+      <artifactId>netty-all</artifactId>
+      <version>${netty.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.asynchttpclient</groupId>
+      <artifactId>async-http-client</artifactId>
+      <version>${async-http-client.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.asynchttpclient</groupId>
+      <artifactId>async-http-client-netty-utils</artifactId>
+      <version>${async-http-client.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.google.protobuf</groupId>
+      <artifactId>protobuf-java</artifactId>
+      <version>${protobuf.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-core</artifactId>
+      <version>${jackson.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-databind</artifactId>
+      <version>${jackson.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-annotations</artifactId>
+      <version>${jackson.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.alibaba</groupId>
+      <artifactId>fastjson</artifactId>
+      <version>${fastjson.verson}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.jayway.jsonpath</groupId>
+      <artifactId>json-path</artifactId>
+      <version>${jsonpath.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+      <version>${slf4j.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-simple</artifactId>
+      <version>${slf4j.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.logging.log4j</groupId>
+      <artifactId>log4j-api</artifactId>
+      <version>${log4j2.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.logging.log4j</groupId>
+      <artifactId>log4j-core</artifactId>
+      <version>${log4j2.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.logging.log4j</groupId>
+      <artifactId>log4j-slf4j-impl</artifactId>
+      <version>${log4j2.version}</version>
+    </dependency>
+
+    <!--Cache-->
+    <dependency>
+      <groupId>com.github.ben-manes.caffeine</groupId>
+      <artifactId>caffeine</artifactId>
+      <version>${caffeine.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>${junit.version}</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
 
 </project>
