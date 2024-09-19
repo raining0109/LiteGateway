@@ -137,4 +137,11 @@ public class GatewayContext extends BaseContext {
     public DefaultHttpGatewayRequest getOriginRequest() {
         return request;
     }
+
+    /**
+     * 根据过滤器ID获取对应的过滤器配置信息
+     */
+    public Rule.FilterConfig getFilterConfig(String filterId){
+        return  rule.getFilterConfig(filterId);
+    }
 }
