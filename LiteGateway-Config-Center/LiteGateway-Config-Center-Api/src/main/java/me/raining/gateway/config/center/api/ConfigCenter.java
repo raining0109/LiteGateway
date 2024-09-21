@@ -10,7 +10,7 @@ public interface ConfigCenter {
     /**
      * 初始化配置中心配置
      */
-    void init(String serverAddr, String dev);
+    void init(String serverAddr, String env);
 
     /**
      * 订阅配置中心配置变更
