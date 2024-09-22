@@ -1,6 +1,7 @@
 package me.raining.gateway.core;
 
 import lombok.extern.slf4j.Slf4j;
+import me.raining.gateway.common.config.DynamicConfigManager;
 import me.raining.gateway.config.center.api.ConfigCenter;
 
 import java.util.ServiceLoader;
@@ -30,7 +31,7 @@ public class Bootstrap {
         //初始化配置中心(里面会初始化rules)
         configCenter.init(config.getRegistryAddress(), config.getEnv());
         //监听配置的新增、修改、删除
-        //一旦有变化，就更新规则rules集合，目前先拿到rule集合，并打印，看一下效果
+        //一旦有变化，就更新规则rules集合，存入DynamicConfigManager
         //测试的时候，需要在nacos下创建配置：
         //Data Id: api-gateway；Group: dev
         //json文件：
@@ -103,13 +104,8 @@ public class Bootstrap {
          *   ]
          * }
          */
-        configCenter.subscribeRulesChange(rules -> log.info(rules.toString()));
+        configCenter.subscribeRulesChange(rules -> DynamicConfigManager.getInstance()
+                .putAllRule(rules));
 
-        //等待，此刻在nacos端修改rules，观察打印效果
-        try {
-            new CountDownLatch(2).await();
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
     }
 }
