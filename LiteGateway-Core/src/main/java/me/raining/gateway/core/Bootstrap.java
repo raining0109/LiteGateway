@@ -1,11 +1,22 @@
 package me.raining.gateway.core;
 
+import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
 import me.raining.gateway.common.config.DynamicConfigManager;
+import me.raining.gateway.common.config.ServiceDefinition;
+import me.raining.gateway.common.config.ServiceInstance;
+import me.raining.gateway.common.utils.NetUtils;
+import me.raining.gateway.common.utils.TimeUtil;
 import me.raining.gateway.config.center.api.ConfigCenter;
+import me.raining.gateway.register.center.api.RegisterCenter;
+import me.raining.gateway.register.center.api.RegisterCenterListener;
 
+import java.util.Map;
 import java.util.ServiceLoader;
+import java.util.Set;
 import java.util.concurrent.CountDownLatch;
+
+import static me.raining.gateway.common.constant.BasicConst.COLON_SEPARATOR;
 
 /**
  * @author raining
@@ -107,5 +118,59 @@ public class Bootstrap {
         configCenter.subscribeRulesChange(rules -> DynamicConfigManager.getInstance()
                 .putAllRule(rules));
 
+        //连接注册中心，将注册中心的实例加载到本地，并订阅注册中心变更
+        final RegisterCenter registerCenter = registerAndSubscribe(config);
+
+    }
+
+    private static RegisterCenter registerAndSubscribe(Config config) {
+        ServiceLoader<RegisterCenter> serviceLoader = ServiceLoader.load(RegisterCenter.class);
+        final RegisterCenter registerCenter = serviceLoader.findFirst().orElseThrow(() -> {
+            log.error("not found RegisterCenter impl");
+            return new RuntimeException("not found RegisterCenter impl");
+        });
+        registerCenter.init(config.getRegistryAddress(), config.getEnv());
+
+        //构造网关服务定义和服务实例
+        ServiceDefinition serviceDefinition = buildGatewayServiceDefinition(config);
+        ServiceInstance serviceInstance = buildGatewayServiceInstance(config);
+
+        //注册
+        registerCenter.register(serviceDefinition, serviceInstance);
+
+        //订阅
+        registerCenter.subscribeAllServices(new RegisterCenterListener() {
+            @Override
+            public void onChange(ServiceDefinition serviceDefinition, Set<ServiceInstance> serviceInstanceSet) {
+                log.info("refresh service and instance: {} {}", serviceDefinition.getUniqueId(),
+                        JSON.toJSON(serviceInstanceSet));
+                DynamicConfigManager manager = DynamicConfigManager.getInstance();
+                //将这次变更事件影响之后的服务实例再次添加到对应的服务实例集合
+                manager.addServiceInstance(serviceDefinition.getUniqueId(), serviceInstanceSet);
+                //修改发生对应的服务定义
+                manager.putServiceDefinition(serviceDefinition.getUniqueId(),serviceDefinition);
+            }
+        });
+        return registerCenter;
+    }
+
+    private static ServiceInstance buildGatewayServiceInstance(Config config) {
+        String localIp = NetUtils.getLocalIp();
+        int port = config.getPort();
+        ServiceInstance serviceInstance = new ServiceInstance();
+        serviceInstance.setServiceInstanceId(localIp + COLON_SEPARATOR + port);
+        serviceInstance.setIp(localIp);
+        serviceInstance.setPort(port);
+        serviceInstance.setRegisterTime(TimeUtil.currentTimeMillis());
+        return serviceInstance;
+    }
+
+    private static ServiceDefinition buildGatewayServiceDefinition(Config config) {
+        ServiceDefinition serviceDefinition = new ServiceDefinition();
+        serviceDefinition.setInvokerMap(Map.of());
+        serviceDefinition.setUniqueId(config.getApplicationName());
+        serviceDefinition.setServiceId(config.getApplicationName());
+        serviceDefinition.setEnvType(config.getEnv());
+        return serviceDefinition;
     }
 }
