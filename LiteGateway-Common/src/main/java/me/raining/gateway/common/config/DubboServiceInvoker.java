@@ -9,7 +9,7 @@ package me.raining.gateway.common.config;
 import lombok.Data;
 
 @Data
-public class DubboServiceInvoker {
+public class DubboServiceInvoker extends AbstractServiceInvoker {
 
     /**
      * 注册中心地址
