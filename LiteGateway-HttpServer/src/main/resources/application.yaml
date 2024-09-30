@@ -1,0 +1,9 @@
+server:
+  port: 3147
+api:
+  registerAddress: 127.0.0.1:8848
+  gray: false
+  env: dev
+spring:
+  application:
+    name: HttpServer
