@@ -1,0 +1,11 @@
+server:
+  port: 3149
+
+dubbo:
+  application:
+    name: DubboWebApplication
+  protocol:
+    name: dubbo
+    port: 50052
+  registry:
+    address: nacos://${nacos.address:127.0.0.1}:8848

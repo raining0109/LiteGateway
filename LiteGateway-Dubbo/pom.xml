@@ -10,11 +10,51 @@
     </parent>
 
     <artifactId>LiteGateway-Dubbo</artifactId>
+    <packaging>pom</packaging>
+    <description>参考官方文档：https://github.com/raining0109/dubbo-samples/tree/master/1-basic/dubbo-samples-spring-boot</description>
+    <modules>
+        <module>LiteGateway-Dubbo-Service</module>
+        <module>LiteGateway-Dubbo-Provider</module>
+        <module>LiteGateway-Dubbo-Consumer</module>
+    </modules>
 
     <properties>
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+        <dubbo.version>3.3.0-beta.2</dubbo.version>
+        <spring-boot.version>3.2.3</spring-boot.version>
     </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>${spring-boot.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter</artifactId>
+                <version>${spring-boot.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <artifactId>spring-boot-starter-logging</artifactId>
+                        <groupId>org.springframework.boot</groupId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.dubbo</groupId>
+                <artifactId>dubbo-bom</artifactId>
+                <version>${dubbo.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
 </project>

@@ -1,0 +1,12 @@
+server:
+  port: 3148
+
+dubbo:
+  application:
+    name: LiteGateway-Dubbo-Provider
+    qos-port: 33333
+  protocol:
+    name: dubbo
+    port: 50052
+  registry:
+    address: nacos://${nacos.address:127.0.0.1}:8848
