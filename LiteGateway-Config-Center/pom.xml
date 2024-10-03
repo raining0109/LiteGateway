@@ -12,6 +12,11 @@
 
     <name>LiteGateway-Config-Center</name>
 
+    <modules>
+        <module>LiteGateway-Config-Center-Api</module>
+        <module>LiteGateway-Config-Center-Nacos-Impl</module>
+    </modules>
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>

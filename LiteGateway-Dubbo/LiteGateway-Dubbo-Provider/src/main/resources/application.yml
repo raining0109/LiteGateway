@@ -10,3 +10,8 @@ dubbo:
     port: 50052
   registry:
     address: nacos://${nacos.address:127.0.0.1}:8848
+
+api:
+  registerAddress: 127.0.0.1:8848
+  gray: false
+  env: dev

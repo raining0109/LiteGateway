@@ -35,5 +35,10 @@
             <artifactId>nacos-client</artifactId>
             <version>2.0.4</version>
         </dependency>
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>${fastjson.verson}</version>
+        </dependency>
     </dependencies>
 </project>

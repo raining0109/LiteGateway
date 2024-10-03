@@ -3,7 +3,7 @@ package me.raining.gateway.dubbo;
 import java.util.Date;
 
 import me.raining.gateway.dubbo.service.UserService;
-import org.apache.dubbo.config.annotation.DubboReference;
+import org.apache.dubbo.config.annotation.Reference;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class Task implements CommandLineRunner {
 
-    @DubboReference
+    @Reference
     private UserService userService;
 
     @Override
