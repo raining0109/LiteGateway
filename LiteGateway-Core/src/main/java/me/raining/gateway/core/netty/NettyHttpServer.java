@@ -102,10 +102,10 @@ public class NettyHttpServer implements LifeCycle {
                         ch.pipeline().addLast(
                                 new HttpServerCodec(), // 处理HTTP请求的编解码器
                                 new HttpObjectAggregator(config.getMaxContentLength()), // 聚合HTTP请求
-                                new HttpServerExpectContinueHandler() // 处理HTTP 100 Continue请求
-                                //todo 待实现
-                                //new NettyHttpServerHandler(nettyProcessor), // 自定义的处理器
-                                //new NettyServerConnectManagerHandler() // 连接管理处理器
+                                new HttpServerExpectContinueHandler(), // 处理HTTP 100 Continue请求
+                                //业务逻辑都在nettyProcessor中
+                                new NettyHttpServerHandler(nettyProcessor), // 自定义的处理器
+                                new NettyServerConnectManagerHandler() // 连接管理处理器
                         );
                     }
                 });
