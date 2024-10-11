@@ -6,9 +6,12 @@ import io.netty.handler.codec.http.FullHttpRequest;
 import io.netty.handler.codec.http.FullHttpResponse;
 import io.netty.util.ReferenceCountUtil;
 import lombok.extern.slf4j.Slf4j;
+import me.raining.gateway.common.enums.ResponseCode;
 import me.raining.gateway.common.exception.BaseException;
 import me.raining.gateway.core.context.GatewayContext;
 import me.raining.gateway.core.context.HttpRequestWrapper;
+import me.raining.gateway.core.helper.RequestHelper;
+import me.raining.gateway.core.helper.ResponseHelper;
 
 /**
  * @author raining
@@ -30,19 +33,21 @@ public class NettyCoreProcessor implements NettyProcessor {
 
         try {
             // 创建并填充 GatewayContext 以保存有关传入请求的信息
-            GatewayContext gatewayContext = null;//todo：构建网关上下文
+            GatewayContext gatewayContext = RequestHelper.doContext(request, ctx);
 
             // 在 GatewayContext 上执行过滤器链逻辑
             //todo 应该在此处执行过滤器链条，传入网关上下文
         } catch (BaseException e) {
             // 通过记录日志并发送适当的 HTTP 响应处理已知异常
             log.error("处理错误 {} {}", e.getCode().getCode(), e.getCode().getMessage());
-            FullHttpResponse httpResponse = null;//todo：构建响应
+            //构建响应
+            FullHttpResponse httpResponse = ResponseHelper.getHttpResponse(e.getCode());
             doWriteAndRelease(ctx, request, httpResponse);
         } catch (Throwable t) {
             // 通过记录日志并发送内部服务器错误响应处理未知异常
             log.error("处理未知错误", t);
-            FullHttpResponse httpResponse = null;//todo：构建响应
+            //构建响应
+            FullHttpResponse httpResponse = ResponseHelper.getHttpResponse(ResponseCode.INTERNAL_ERROR);
             doWriteAndRelease(ctx, request, httpResponse);
         }
     }
