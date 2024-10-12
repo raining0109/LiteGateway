@@ -15,6 +15,6 @@ public interface Filter {
         if(annotation != null){
             return annotation.order();
         }
-        return Integer.MAX_VALUE;
+        return Integer.MAX_VALUE - 1;
     };
 }
