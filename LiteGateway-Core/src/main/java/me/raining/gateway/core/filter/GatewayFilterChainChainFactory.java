@@ -98,4 +98,8 @@ public class GatewayFilterChainChainFactory implements FilterChainFactory {
     public Filter getFilter(String filterId) {
         return processorFilterIdMap.get(filterId);
     }
+
+    public static void main(String[] args) {
+        new GatewayFilterChainChainFactory();
+    }
 }
