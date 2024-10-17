@@ -41,6 +41,10 @@ public class RequestHelper {
         GatewayContext gatewayContext = new GatewayContext(serviceDefinition.getProtocol(), ctx,
                 HttpUtil.isKeepAlive(request), gateWayRequest, rule, 0);
 
+        //测试用
+        //后续服务发现做完，这里都要改成动态的--以及在负载均衡算法实现
+        gatewayContext.getRequest().setRequestHost("127.0.0.1:3147");
+
         return gatewayContext;
     }
 

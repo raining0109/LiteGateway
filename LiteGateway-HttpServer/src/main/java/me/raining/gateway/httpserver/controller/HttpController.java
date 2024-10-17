@@ -6,6 +6,7 @@ import me.raining.gateway.client.api.ApiProperties;
 import me.raining.gateway.client.api.ApiProtocol;
 import me.raining.gateway.client.api.ApiService;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
@@ -16,7 +17,8 @@ import javax.annotation.Resource;
  * @description HTTP Controller类
  */
 @Slf4j
-@RestController("/http-server")
+@RestController()
+@RequestMapping("/http-server")
 @ApiService(serviceId = "backend-http-server", protocol = ApiProtocol.HTTP, patternPath = "/http-server/**")
 public class HttpController {
 

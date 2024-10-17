@@ -118,8 +118,23 @@ public class Bootstrap {
         configCenter.subscribeRulesChange(rules -> DynamicConfigManager.getInstance()
                 .putAllRule(rules));
 
+        //启动容器
+        Container container = new Container(config);
+        container.start();
+
         //连接注册中心，将注册中心的实例加载到本地，并订阅注册中心变更
         final RegisterCenter registerCenter = registerAndSubscribe(config);
+
+        //服务优雅关机
+        //收到kill信号时调用
+        Runtime.getRuntime().addShutdownHook(new Thread() {
+            @Override
+            public void run() {
+                registerCenter.deregister(buildGatewayServiceDefinition(config),
+                        buildGatewayServiceInstance(config));
+                container.shutdown();
+            }
+        });
 
     }
 
@@ -148,7 +163,7 @@ public class Bootstrap {
                 //将这次变更事件影响之后的服务实例再次添加到对应的服务实例集合
                 manager.addServiceInstance(serviceDefinition.getUniqueId(), serviceInstanceSet);
                 //修改发生对应的服务定义
-                manager.putServiceDefinition(serviceDefinition.getUniqueId(),serviceDefinition);
+                manager.putServiceDefinition(serviceDefinition.getUniqueId(), serviceDefinition);
             }
         });
         return registerCenter;

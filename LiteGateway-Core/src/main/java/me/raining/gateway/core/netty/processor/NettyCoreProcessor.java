@@ -10,6 +10,8 @@ import me.raining.gateway.common.enums.ResponseCode;
 import me.raining.gateway.common.exception.BaseException;
 import me.raining.gateway.core.context.GatewayContext;
 import me.raining.gateway.core.context.HttpRequestWrapper;
+import me.raining.gateway.core.filter.FilterChainFactory;
+import me.raining.gateway.core.filter.GatewayFilterChainChainFactory;
 import me.raining.gateway.core.helper.RequestHelper;
 import me.raining.gateway.core.helper.ResponseHelper;
 
@@ -20,6 +22,10 @@ import me.raining.gateway.core.helper.ResponseHelper;
  */
 @Slf4j
 public class NettyCoreProcessor implements NettyProcessor {
+
+    // FilterChainFactory 负责创建和管理过滤器的执行。
+    private FilterChainFactory filterChainFactory = GatewayFilterChainChainFactory.getInstance();
+
 
     /**
      * 处理传入的 HTTP 请求
@@ -35,8 +41,9 @@ public class NettyCoreProcessor implements NettyProcessor {
             // 创建并填充 GatewayContext 以保存有关传入请求的信息
             GatewayContext gatewayContext = RequestHelper.doContext(request, ctx);
 
-            // 在 GatewayContext 上执行过滤器链逻辑
-            //todo 应该在此处执行过滤器链条，传入网关上下文
+            //在 GatewayContext 上执行过滤器链逻辑
+            //传入网关上下文
+            filterChainFactory.buildFilterChain(gatewayContext).doFilter(gatewayContext);
         } catch (BaseException e) {
             // 通过记录日志并发送适当的 HTTP 响应处理已知异常
             log.error("处理错误 {} {}", e.getCode().getCode(), e.getCode().getMessage());
