@@ -2,6 +2,8 @@ package me.raining.gateway.core.context;
 
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.util.ReferenceCountUtil;
+import lombok.Getter;
+import lombok.Setter;
 import me.raining.gateway.common.config.Rule;
 import me.raining.gateway.common.utils.AssertUtil;
 import me.raining.gateway.core.request.DefaultHttpGatewayRequest;
@@ -21,6 +23,10 @@ public class GatewayContext extends BaseContext {
     private Rule rule;
 
     private int currentRetryTimes;
+
+    @Setter
+    @Getter
+    private boolean gray;
 
     /**
      * 构造函数

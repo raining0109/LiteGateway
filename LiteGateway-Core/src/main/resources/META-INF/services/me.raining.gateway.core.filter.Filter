@@ -1,1 +1,2 @@
 me.raining.gateway.core.filter.router.RouterFilter
+me.raining.gateway.core.filter.gray.GrayFilter
