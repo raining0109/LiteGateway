@@ -30,7 +30,7 @@ public class HttpController {
     public String ping() {
         log.info("{}", apiProperties);
         try {
-            Thread.sleep(200000000);
+//            Thread.sleep(200000000);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

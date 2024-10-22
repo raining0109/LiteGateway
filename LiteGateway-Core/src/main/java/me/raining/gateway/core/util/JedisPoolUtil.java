@@ -17,6 +17,8 @@ public class JedisPoolUtil {
     public static JedisPool jedisPool = null;
     private String host;
     private int port;
+    private String password;
+    private int timeout;
     private int maxTotal;
     private int maxIdle;
     private int minIdle;
@@ -35,6 +37,9 @@ public class JedisPoolUtil {
 
             host = prop.getProperty("redis.host");
             port = Integer.parseInt(prop.getProperty("redis.port"));
+            port = Integer.parseInt(prop.getProperty("redis.port"));
+            timeout = Integer.parseInt(prop.getProperty("redis.timeout"));
+            password = prop.getProperty("redis.password");
 
             maxTotal = Integer.parseInt(prop.getProperty("redis.maxTotal"));
             maxIdle = Integer.parseInt(prop.getProperty("redis.maxIdle"));
@@ -61,7 +66,7 @@ public class JedisPoolUtil {
                 config.setMaxIdle(maxIdle);
                 config.setMaxWaitMillis(maxWaitMillis);
                 config.setTestOnBorrow(testOnBorrow);
-                jedisPool = new JedisPool(config, host, port);
+                jedisPool = new JedisPool(config, host, port, timeout, password);
             } catch (Exception e) {
                 log.debug("init redis pool failed : {}", e.getMessage());
             } finally {
