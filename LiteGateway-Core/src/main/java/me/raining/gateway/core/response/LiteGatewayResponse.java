@@ -65,11 +65,25 @@ public class LiteGatewayResponse {
     /**
      * 处理返回json对象，失败时调用
      */
-    public static LiteGatewayResponse buildGatewayResponse(ResponseCode code, Object...args){
+    public static LiteGatewayResponse buildGatewayResponse(ResponseCode code){
         ObjectNode objectNode = JSONUtil.createObjectNode();
         objectNode.put(JSONUtil.STATUS,code.getStatus().code());
         objectNode.put(JSONUtil.CODE,code.getCode());
         objectNode.put(JSONUtil.MESSAGE,code.getMessage());
+
+        LiteGatewayResponse response = new LiteGatewayResponse();
+        response.setHttpResponseStatus(code.getStatus());
+        response.putHeader(HttpHeaderNames.CONTENT_TYPE, HttpHeaderValues.APPLICATION_JSON+";charset=utf-8");
+        response.setContent(JSONUtil.toJSONString(objectNode));
+
+        return response;
+    }
+
+    public static LiteGatewayResponse buildGatewayResponse(ResponseCode code, String msg){
+        ObjectNode objectNode = JSONUtil.createObjectNode();
+        objectNode.put(JSONUtil.STATUS,code.getStatus().code());
+        objectNode.put(JSONUtil.CODE,code.getCode());
+        objectNode.put(JSONUtil.MESSAGE,msg);
 
         LiteGatewayResponse response = new LiteGatewayResponse();
         response.setHttpResponseStatus(code.getStatus());

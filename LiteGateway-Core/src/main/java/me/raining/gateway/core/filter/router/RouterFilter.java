@@ -134,8 +134,10 @@ public class RouterFilter implements Filter {
             protected Object getFallback() {
                 // 当熔断发生时，执行降级逻辑。
                 // 设置网关上下文的响应信息，通常包括一个降级响应。
-                gatewayContext.setResponse(hystrixConfig.get().getFallbackResponse());
+                gatewayContext.setResponse(LiteGatewayResponse.buildGatewayResponse(ResponseCode.GATEWAY_FALLBACK,
+                        hystrixConfig.get().getFallbackResponse()));
                 gatewayContext.written();
+                ResponseHelper.writeResponse(gatewayContext);
                 return null;
             }
         }.execute(); // 执行Hystrix命令
