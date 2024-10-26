@@ -1,5 +1,6 @@
 package me.raining.gateway.core;
 
+import com.lmax.disruptor.*;
 import lombok.Data;
 
 /**
@@ -55,4 +56,23 @@ public class Config {
     private int bufferSize = 1024 * 16;
 
     private int processThread = Runtime.getRuntime().availableProcessors();
+
+    private String waitStrategy ="blocking";
+
+    /**
+     * 策略模式获取等待策略
+     */
+    public WaitStrategy getWaitStrategy(){
+        switch (waitStrategy){
+            case "busySpin":
+                return  new BusySpinWaitStrategy();
+            case "yielding":
+                return  new YieldingWaitStrategy();
+            case "sleeping":
+                return  new SleepingWaitStrategy();
+            case "blocking":
+            default:
+                return new BlockingWaitStrategy();
+        }
+    }
 }
