@@ -194,5 +194,11 @@
             <artifactId>disruptor</artifactId>
             <version>3.3.6</version>
         </dependency>
+        <!-- 用于上报监控指标数据 -->
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-registry-prometheus</artifactId>
+            <version>1.13.3</version>
+        </dependency>
     </dependencies>
 </project>

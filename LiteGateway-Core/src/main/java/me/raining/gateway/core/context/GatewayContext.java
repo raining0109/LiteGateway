@@ -1,5 +1,6 @@
 package me.raining.gateway.core.context;
 
+import io.micrometer.core.instrument.Timer;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.util.ReferenceCountUtil;
 import lombok.Getter;
@@ -27,6 +28,13 @@ public class GatewayContext extends BaseContext {
     @Setter
     @Getter
     private boolean gray;
+
+    /**
+     * 记录应用程序中的方法调用或服务请求所花费的时间
+     */
+    @Setter
+    @Getter
+    private Timer.Sample timerSample;
 
     /**
      * 构造函数

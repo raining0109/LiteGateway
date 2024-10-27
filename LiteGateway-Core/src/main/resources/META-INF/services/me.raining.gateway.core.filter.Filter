@@ -3,3 +3,5 @@ me.raining.gateway.core.filter.gray.GrayFilter
 me.raining.gateway.core.filter.flow.FlowControlFilter
 me.raining.gateway.core.filter.auth.AuthFilter
 me.raining.gateway.core.filter.mock.MockFilter
+me.raining.gateway.core.filter.monitor.MonitorFilter
+me.raining.gateway.core.filter.monitor.MonitorEndFilter
