@@ -1,5 +1,6 @@
 package me.raining.gateway.core.filter.monitor;
 
+import com.alibaba.nacos.common.utils.RandomUtils;
 import com.sun.net.httpserver.HttpServer;
 import io.micrometer.core.instrument.Timer;
 import io.micrometer.prometheusmetrics.PrometheusConfig;
@@ -13,6 +14,8 @@ import me.raining.gateway.core.filter.FilterAspect;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import static me.raining.gateway.common.constant.FilterConst.*;
 
@@ -64,6 +67,25 @@ public class MonitorEndFilter implements Filter {
         }
         // 记录启动HTTP服务器成功的日志
         log.info("prometheus http server start successful, port:{}", ConfigLoader.getConfig().getPrometheusPort());
+
+        // 使用mock数据定期更新Prometheus监控指标，以模拟应用程序负载
+        Executors.newScheduledThreadPool(1000).scheduleAtFixedRate(() -> {
+            // 创建Timer.Sample实例，开始计时
+            Timer.Sample sample = Timer.start();
+            try {
+                // 模拟执行一个持续100到200毫秒的任务
+                Thread.sleep(RandomUtils.nextInt(100, 200));
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+            // 创建一个定制的Timer，记录请求的相关信息
+            Timer timer = prometheusMeterRegistry.timer("gateway_request",
+                    "uniqueId", "backend-http-server:1.0.0",
+                    "protocol", "http",
+                    "path", "/http-server/ping" + RandomUtils.nextInt(10, 200));
+            // 停止计时器，并将数据记录到Prometheus注册表中
+            sample.stop(timer);
+        }, 200, 100, TimeUnit.MILLISECONDS); // 定时任务的初始延迟、周期和时间单位
     }
 
     @Override
