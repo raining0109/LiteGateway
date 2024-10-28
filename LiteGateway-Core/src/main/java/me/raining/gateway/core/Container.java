@@ -3,6 +3,7 @@ package me.raining.gateway.core;
 import lombok.extern.slf4j.Slf4j;
 import me.raining.gateway.core.netty.NettyHttpClient;
 import me.raining.gateway.core.netty.NettyHttpServer;
+import me.raining.gateway.core.netty.processor.DisruptorNettyCoreProcessor;
 import me.raining.gateway.core.netty.processor.NettyCoreProcessor;
 import me.raining.gateway.core.netty.processor.NettyProcessor;
 
@@ -28,8 +29,8 @@ public class Container implements LifeCycle {
 
     @Override
     public void init() {
-        this.nettyProcessor = new NettyCoreProcessor();
-
+//        this.nettyProcessor = new NettyCoreProcessor();
+        this.nettyProcessor = new DisruptorNettyCoreProcessor(config, new NettyCoreProcessor());
         this.nettyHttpServer = new NettyHttpServer(config, nettyProcessor);
 
         this.nettyHttpClient = new NettyHttpClient(config,
@@ -40,6 +41,7 @@ public class Container implements LifeCycle {
     public void start() {
         nettyHttpServer.start();;
         nettyHttpClient.start();
+        nettyProcessor.start();
         log.info("api gateway started!");
     }
 
@@ -47,5 +49,6 @@ public class Container implements LifeCycle {
     public void shutdown() {
         nettyHttpServer.shutdown();
         nettyHttpClient.shutdown();
+        nettyProcessor.shutDown();
     }
 }
