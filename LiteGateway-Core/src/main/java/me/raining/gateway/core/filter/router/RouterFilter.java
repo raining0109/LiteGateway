@@ -106,13 +106,16 @@ public class RouterFilter implements Filter {
      * 当连续请求失败率达到配置的阈值。
      */
     private void routeWithHystrix(GatewayContext gatewayContext, Optional<Rule.HystrixConfig> hystrixConfig) {
-
         HystrixCommand.Setter setter =  //进行分组
                 HystrixCommand.Setter.withGroupKey(HystrixCommandGroupKey.Factory.asKey(gatewayContext.getUniqueId()))
                         .andCommandKey(HystrixCommandKey.Factory.asKey(gatewayContext.getRequest().getPath()))
                         //线程池大小设置
                         .andThreadPoolPropertiesDefaults(HystrixThreadPoolProperties.Setter()
-                                .withCoreSize(hystrixConfig.get().getThreadCoreSize()))
+                                .withCoreSize(hystrixConfig.get().getThreadCoreSize())
+                                .withAllowMaximumSizeToDivergeFromCoreSize(true)
+                                .withMaximumSize(50)
+                                .withMaxQueueSize(-1)
+                                .withQueueSizeRejectionThreshold(100))
                         .andCommandPropertiesDefaults(HystrixCommandProperties.Setter()
                                 //线程池
                                 .withExecutionIsolationStrategy(HystrixCommandProperties.ExecutionIsolationStrategy.THREAD)
@@ -133,14 +136,23 @@ public class RouterFilter implements Filter {
             @Override
             protected Object getFallback() {
                 // 当熔断发生时，执行降级逻辑。
-                // 设置网关上下文的响应信息，通常包括一个降级响应。
-                gatewayContext.setResponse(LiteGatewayResponse.buildGatewayResponse(ResponseCode.GATEWAY_FALLBACK,
-                        hystrixConfig.get().getFallbackResponse()));
+                // 检查是否是因为超时引发的熔断
+                if (isFailedExecution() && getFailedExecutionException() instanceof TimeoutException) {
+                    // 这里设置你自己的超时异常处理逻辑
+                    // 例如，返回一个自定义的错误响应
+                    gatewayContext.setResponse(LiteGatewayResponse.buildGatewayResponse(ResponseCode.GATEWAY_FALLBACK,
+                            hystrixConfig.get().getFallbackResponse()));
+
+                } else {
+                    // 其他类型的熔断处理
+                    gatewayContext.setResponse(LiteGatewayResponse.buildGatewayResponse(
+                            ResponseCode.GATEWAY_FALLBACK));
+                }
                 gatewayContext.written();
-                ResponseHelper.writeResponse(gatewayContext);
+//                ResponseHelper.writeResponse(gatewayContext);
                 return null;
             }
-        }.execute(); // 执行Hystrix命令
+        }.execute();
     }
 
     private void complete(Request request, Response response, Throwable throwable, GatewayContext gatewayContext,
