@@ -12,15 +12,15 @@ LiteGateway 是一个基于 Netty & Nacos 的高性能轻量级自研网关，�
 ## 一、项目架构
 ### 整体架构
 
-![](https://tuchuang-01.oss-cn-beijing.aliyuncs.com/img/API网关框架.drawio.png)
+<p align="center"><img src= "https://tuchuang-01.oss-cn-beijing.aliyuncs.com/img/API网关框架.drawio.png" /></p>
 
 ### 核心流程
 
-![](https://tuchuang-01.oss-cn-beijing.aliyuncs.com/img/gateway-core-logic.drawio.png)
+<p align="center"><img src= "https://tuchuang-01.oss-cn-beijing.aliyuncs.com/img/gateway-core-logic.drawio.png" /></p>
 
 ### 过滤器链
 
-![](https://tuchuang-01.oss-cn-beijing.aliyuncs.com/img/filter1002.png)
+<p align="center"><img src= "https://tuchuang-01.oss-cn-beijing.aliyuncs.com/img/filter1002.png" /></p>
 
 ## 二、技术调研
 
